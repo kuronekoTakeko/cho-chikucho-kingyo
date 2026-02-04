@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>複利付き貯金箱</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#4caf50">
+  <link rel="manifest" href="manifest.webmanifest">
+
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      margin: 0;
+      padding: 10px;
+    }
+
+    /* タブ（最上段） */
+    .tab-bar {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-bottom: 10px;
+    }
+    .tab {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 8px;
+      border-radius: 6px;
+      background: #ddd;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    .tab.active {
+      background: #4caf50;
+      color: #fff;
+    }
+    .tab-name {
+      margin-right: 6px;
+    }
+    .tab-close {
+      font-weight: bold;
+      cursor: pointer;
+      padding: 0 2px;
+    }
+    .tab-add {
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: #eee;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    /* タイトル行（中央タイトル＋右端設定） */
+    .title-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      margin-bottom: 10px;
+    }
+    .title-row h2 {
+      margin: 0;
+      font-size: 20px;
+      text-align: center;
+    }
+    #settingsButton {
+      position: absolute;
+      right: 0;
+      padding: 6px 12px;
+      font-size: 14px;
+    }
+
+    /* 合計表示（最終日の結果） */
+    .total-display {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    /* 入金額計・複利計（横並び） */
+    .summary-row {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+    .summary-box {
+      flex: 1;
+      background: #f5f5f5;
+      padding: 10px;
+      border-radius: 6px;
+      text-align: center;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    /* テーブル */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    th, td {
+      border: 1px solid #aaa;
+      padding: 4px;
+      text-align: center;
+    }
+    input[type="number"] {
+      width: 80px;
+    }
+
+    /* モーダル */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .modal {
+      background: #fff;
+      padding: 16px;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 360px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+    .modal h3 {
+      margin-top: 0;
+      font-size: 16px;
+    }
+    .modal-row {
+      margin-bottom: 10px;
+    }
+    .modal-row label {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+    .modal-row input[type="text"],
+    .modal-row input[type="number"] {
+      width: 100%;
+      padding: 6px;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+    .modal-buttons {
+      text-align: right;
+      margin-top: 8px;
+    }
+    .modal-buttons button {
+      margin-left: 4px;
+    }
+    .danger {
+      background: #f44336;
+      color: #fff;
+    }
+    .confirm-box {
+      margin-top: 8px;
+      padding: 8px;
+      border-radius: 6px;
+      background: #fff3e0;
+      font-size: 13px;
+    }
+    .confirm-buttons {
+      text-align: right;
+      margin-top: 6px;
+    }
+    .confirm-buttons button {
+      margin-left: 4px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- タブ（最上段） -->
+  <div class="tab-bar" id="tabBar"></div>
+
+  <!-- タイトル行（中央タイトル＋右端設定） -->
+  <div class="title-row">
+    <h2 id="currentBoxTitle">貯金箱</h2>
+    <button id="settingsButton">設定</button>
+  </div>
+
+  <!-- 最終日の総合計 -->
+  <div class="total-display" id="totalDisplay">最終総合計：0 円</div>
+
+  <!-- 入金額合計・複利合計 -->
+  <div class="summary-row">
+    <div class="summary-box" id="depositSum">入金額合計：0 円</div>
+    <div class="summary-box" id="interestSum">複利合計：0 円</div>
+  </div>
+
+  <!-- テーブル -->
+  <table>
+    <thead>
+      <tr>
+        <th>日付</th>
+        <th>前日までの総合計</th>
+        <th>複利</th>
+        <th>今日の入金</th>
+        <th>本日の総合計</th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+
+  <!-- 設定モーダル -->
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal">
+      <h3 id="modalTitle">設定</h3>
+
+      <div class="modal-row">
+        <label for="boxNameInput">貯金箱の名前</label>
+        <input type="text" id="boxNameInput" autocomplete="off">
+      </div>
+
+      <div class="modal-row">
+        <label for="rateInput">複利率（％／日）</label>
+        <input type="number" id="rateInput" step="0.1" inputmode="decimal">
+      </div>
+
+      <div class="modal-row">
+        <button id="resetButton" class="danger">この貯金箱をリセット</button>
+      </div>
+
+      <div class="confirm-box" id="resetConfirmBox" style="display:none;">
+        <div id="resetConfirmText"></div>
+        <div class="confirm-buttons">
+          <button id="resetOkButton" class="danger">OK</button>
+          <button id="resetNoButton">NO</button>
+        </div>
+      </div>
+
+      <div class="modal-buttons">
+        <button id="modalCloseButton">閉じる</button>
+        <button id="modalSaveButton">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* データ管理 */
+    let data = JSON.parse(localStorage.getItem('chokinData') || '{}');
+    if (!data.boxes) data.boxes = {};
+
+    if (!data.currentBoxKey || !data.boxes[data.currentBoxKey]) {
+      const key = 'box1';
+      data.boxes[key] = createNewBox('貯金箱1');
+      data.currentBoxKey = key;
+      saveData();
+    }
+
+    function createNewBox(name) {
+      const rows = [];
+      for (let i = 1; i <= 31; i++) rows.push({ day: i, today: 0 });
+      return { name, rate: 1.0, rows };
+    }
+
+    function saveData() {
+      localStorage.setItem('chokinData', JSON.stringify(data));
+    }
+
+    function getCurrentBox() {
+      return data.boxes[data.currentBoxKey];
+    }
+
+    /* タブ描画 */
+    function renderTabs() {
+      const tabBar = document.getElementById('tabBar');
+      tabBar.innerHTML = '';
+      const keys = Object.keys(data.boxes);
+
+      keys.forEach(key => {
+        const box = data.boxes[key];
+        const tab = document.createElement('div');
+        tab.className = 'tab' + (key === data.currentBoxKey ? ' active' : '');
+        tab.onclick = () => {
+          data.currentBoxKey = key;
+          saveData();
+          renderAll();
+        };
+
+        const nameSpan = document.createElement('span');
+        nameSpan.className = 'tab-name';
+        nameSpan.textContent = box.name;
+
+        const closeSpan = document.createElement('span');
+        closeSpan.className = 'tab-close';
+        closeSpan.textContent = '×';
+        closeSpan.onclick = (e) => {
+          e.stopPropagation();
+          deleteBox(key);
+        };
+
+        tab.appendChild(nameSpan);
+        tab.appendChild(closeSpan);
+        tabBar.appendChild(tab);
+      });
+
+      const addTab = document.createElement('div');
+      addTab.className = 'tab-add';
+      addTab.textContent = '＋';
+      addTab.onclick = addBox;
+      tabBar.appendChild(addTab);
+    }
+
+    function addBox() {
+      const index = Object.keys(data.boxes).length + 1;
+      const key = 'box' + Date.now();
+      data.boxes[key] = createNewBox('貯金箱' + index);
+      data.currentBoxKey = key;
+      saveData();
+      renderAll();
+    }
+
+    function deleteBox(key) {
+      const keys = Object.keys(data.boxes);
+      if (keys.length <= 1) {
+        alert('貯金箱は最低1つ必要です。');
+        return;
+      }
+      delete data.boxes[key];
+      data.currentBoxKey = Object.keys(data.boxes)[0];
+      saveData();
+      renderAll();
+    }
+
+    /* テーブル描画＋最終結果計算 */
+    function renderTable() {
+      const tbody = document.getElementById('tbody');
+      tbody.innerHTML = '';
+
+      const box = getCurrentBox();
+      const rate = box.rate || 0;
+
+      let prevTotal = 0;
+      let finalTotal = 0;
+      let depositSum = 0;
+      let interestSum = 0;
+
+      box.rows.forEach((row, idx) => {
+        const interest = Math.floor(prevTotal * (rate / 100));
+        const today = Number(row.today) || 0;
+        const total = prevTotal + interest + today;
+
+        depositSum += today;
+        interestSum += interest;
+
+        const tr = document.createElement('tr');
+
+        const tdDay = document.createElement('td');
+        tdDay.textContent = row.day;
+
+        const tdPrev = document.createElement('td');
+        tdPrev.textContent = prevTotal;
+
+        const tdInterest = document.createElement('td');
+        tdInterest.textContent = interest;
+
+        const tdToday = document.createElement('td');
+        const input = document.createElement('input');
+        input.type = 'number';
+        input.inputMode = 'decimal';
+        input.value = today || '';
+        input.onchange = (e) => {
+          box.rows[idx].today = Number(e.target.value) || 0;
+          saveData();
+          renderTable();
+        };
+        tdToday.appendChild(input);
+
+        const tdTotal = document.createElement('td');
+        tdTotal.textContent = total;
+
+        tr.appendChild(tdDay);
+        tr.appendChild(tdPrev);
+        tr.appendChild(tdInterest);
+        tr.appendChild(tdToday);
+        tr.appendChild(tdTotal);
+
+        tbody.appendChild(tr);
+
+        prevTotal = total;
+        finalTotal = total;
+      });
+
+      /* 上部の表示を「最終日の結果」に変更 */
+      document.getElementById('totalDisplay').textContent =
+        '最終総合計：' + finalTotal + ' 円';
+
+      document.getElementById('depositSum').textContent =
+        '入金額合計：' + depositSum + ' 円';
+
+      document.getElementById('interestSum').textContent =
+        '複利合計：' + interestSum + ' 円';
+    }
+
+    /* タイトル更新 */
+    function updateTitle() {
+      const box = getCurrentBox();
+      document.getElementById('currentBoxTitle').textContent = box.name;
+    }
+
+    function renderAll() {
+      renderTabs();
+      updateTitle();
+      renderTable();
+    }
+
+    /* 設定モーダル */
+    const modalBackdrop = document.getElementById('modalBackdrop');
+    const modalTitle = document.getElementById('modalTitle');
+    const boxNameInput = document.getElementById('boxNameInput');
+    const rateInput = document.getElementById('rateInput');
+    const resetButton = document.getElementById('resetButton');
+    const resetConfirmBox = document.getElementById('resetConfirmBox');
+    const resetConfirmText = document.getElementById('resetConfirmText');
+    const resetOkButton = document.getElementById('resetOkButton');
+    const resetNoButton = document.getElementById('resetNoButton');
+    const modalCloseButton = document.getElementById('modalCloseButton');
+    const modalSaveButton = document.getElementById('modalSaveButton');
+    const settingsButton = document.getElementById('settingsButton');
+
+    settingsButton.onclick = () => {
+      const box = getCurrentBox();
+      modalTitle.textContent = box.name + ' の設定';
+      boxNameInput.value = box.name;
+      rateInput.value = box.rate;
+      resetConfirmBox.style.display = 'none';
+      modalBackdrop.style.display = 'flex';
+    };
+
+    modalCloseButton.onclick = () => {
+      modalBackdrop.style.display = 'none';
+    };
+
+    modalSaveButton.onclick = () => {
+      const box = getCurrentBox();
+      box.name = boxNameInput.value.trim() || box.name;
+      box.rate = parseFloat(rateInput.value) || 1.0;
+      saveData();
+      modalBackdrop.style.display = 'none';
+      renderAll();
+    };
+
+    resetButton.onclick = () => {
+      const box = getCurrentBox();
+      resetConfirmText.textContent =
+        box.name + ' の貯金箱をリセットします。よろしいですか？';
+      resetConfirmBox.style.display = 'block';
+    };
+
+    resetNoButton.onclick = () => {
+      resetConfirmBox.style.display = 'none';
+    };
+
+    resetOkButton.onclick = () => {
+      const box = getCurrentBox();
+      box.rows.forEach(r => r.today = 0);
+      saveData();
+      resetConfirmBox.style.display = 'none';
+      modalBackdrop.style.display = 'none';
+      renderAll();
+    };
+
+    /* Service Worker */
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./service-worker.js');
+      });
+    }
+
+    renderAll();
+  </script>
+</body>
+</html>
