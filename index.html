@@ -14,7 +14,39 @@
       padding: 10px;
     }
 
-    /* タブ（最上段） */
+    .tab-bar {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 0;
+    }
+
+    .tab {
+      padding: 8px 16px;
+      border: 1px solid #aaa;
+      border-bottom: none;
+      border-radius: 6px 6px 0 0;
+      background: #e5e5e5;
+      cursor: pointer;
+      font-weight: bold;
+      position: relative;
+      top: 1px;
+    }
+
+    .tab.active {
+      background: white;
+      border-bottom: 1px solid white;
+      z-index: 2;
+    }
+
+    #sheetArea {
+      border: 1px solid #aaa;
+      border-radius: 0 6px 6px 6px;
+      padding: 10px;
+      background: white;
+      position: relative;
+      z-index: 1;
+    }
+    /* タブ（最上段） 
     .tab-bar {
       display: flex;
       align-items: center;
@@ -23,25 +55,28 @@
       margin-bottom: 10px;
     }
     .tab {
-      display: inline-flex;
+      display: flex;
       align-items: center;
-      padding: 4px 8px;
+      justify-content: space-between;
+      padding: 8px 12px;
       border-radius: 6px;
       background: #ddd;
       cursor: pointer;
-      font-size: 13px;
+      font-size: 14px;
+      min-width: 120px;
     }
     .tab.active {
       background: #4caf50;
       color: #fff;
-    }
+    }*/
     .tab-name {
       margin-right: 6px;
     }
     .tab-close {
       font-weight: bold;
       cursor: pointer;
-      padding: 0 2px;
+      padding: 0 4px;
+      margin-left: 12px; 
     }
     .tab-add {
       padding: 4px 10px;
@@ -50,6 +85,122 @@
       cursor: pointer;
       font-size: 16px;
     }
+
+    .box-header {
+      text-align: center;
+    }
+
+    .box-title-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      position: relative;
+    }
+    
+    .level-inline.level-1 { color: #b0c4de; }
+    .level-inline.level-2 { color: #90ee90; }
+    .level-inline.level-3 { color: #ffd700; }
+    .level-inline.level-4 { color: #ffa07a; }
+    .level-inline.level-5 { color: #ff7f7f; }
+    .level-inline.level-6 { color: #ff69b4; }
+    .level-inline.level-7 { color: #ba55d3; }
+    .level-inline.level-8 { color: #9370db; }
+    .level-inline.level-9 { color: #6495ed; }
+    .level-inline.level-10 { color: #00ced1; }
+    .level-inline.level-11 { color: #daa520; }
+    .level-inline.level-12 { color: #ff4500; }
+    .level-inline.level-13 { color: #1e90ff; }
+    .level-inline.level-14 { color: #8a2be2; }
+    .level-inline.level-15 { color: #f8f8ff; }
+    .level-inline.level-16 { color: #fffacd; }
+    .level-inline.level-17 { color: #e0ffff; }
+    .level-inline.level-18 { color: #191970; }
+    .level-inline.level-19 { color: #4b0082; }
+    .level-inline.level-20 { color: #ff00ff; }
+
+
+
+    .box-title-row h2 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .level-inline {
+      font-size: 16px;
+      font-weight: bold;
+      color: #4caf50;
+    }
+
+    #settingsButton {
+      position: absolute;
+      right: 0;
+    }
+
+    .xp-info {
+      margin-top: 4px;
+      font-size: 14px;
+    }
+
+    /* レベル表示 */
+    #levelDisplay {
+      font-size: 20px;
+      font-weight: bold;
+      margin-top: 5px;
+    }
+
+    /* XPゲージ */
+    #xpBarContainer {
+      width: 200px;
+      height: 14px;
+      background: #ddd;
+      border-radius: 6px;
+      overflow: hidden;
+      margin: 4px auto 0;
+      position: relative;
+    }
+
+    #xpBar {
+      height: 100%;
+      background: #4caf50;
+      width: 0%;
+      transition: width 0.3s;
+    }
+
+    #xpText {
+      position: absolute;
+      right: 6px;
+      top: 0;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      font-size: 12px;
+      font-weight: bold;
+      color: #fff;
+      pointer-events: none;
+    }
+
+    /* レベルごとの行の色 */
+    .row-level-1 { background: #e6f3ff; }
+    .row-level-2 { background: #e6ffe6; }
+    .row-level-3 { background: #fff7b3; }
+    .row-level-4 { background: #ffd1a1; }
+    .row-level-5 { background: #ffcccc; }
+    .row-level-6 { background: #ffe0f0; }
+    .row-level-7 { background: #f0d0ff; }
+    .row-level-8 { background: #e0d8ff; }
+    .row-level-9 { background: #d0e0ff; }
+    .row-level-10 { background: #d0ffff; }
+    .row-level-11 { background: #fff0c0; }
+    .row-level-12 { background: #ffd0b0; }
+    .row-level-13 { background: #c0e0ff; }
+    .row-level-14 { background: #e0c0ff; }
+    .row-level-15 { background: #ffffff; }
+    .row-level-16 { background: #ffffe0; }
+    .row-level-17 { background: #e0ffff; }
+    .row-level-18 { background: #c0c8ff; }
+    .row-level-19 { background: #d8c0ff; }
+    .row-level-20 { background: #ffe0ff; }
 
     /* タイトル行（中央タイトル＋右端設定） */
     .title-row {
@@ -179,73 +330,135 @@
   <!-- タブ（最上段） -->
   <div class="tab-bar" id="tabBar"></div>
 
-  <!-- タイトル行（中央タイトル＋右端設定） -->
-  <div class="title-row">
-    <h2 id="currentBoxTitle">貯金箱</h2>
-    <button id="settingsButton">設定</button>
-  </div>
+  <div id="sheetArea">
+    <div id="tableContainer"></div>
+  
+    <!-- ▲ ここまでが新しいタブ ▲ -->
 
-  <!-- 最終日の総合計 -->
-  <div class="total-display" id="totalDisplay">最終総合計：0 円</div>
-
-  <!-- 入金額合計・複利合計 -->
-  <div class="summary-row">
-    <div class="summary-box" id="depositSum">入金額合計：0 円</div>
-    <div class="summary-box" id="interestSum">複利合計：0 円</div>
-  </div>
-
-  <!-- テーブル -->
-  <table>
-    <thead>
-      <tr>
-        <th>日付</th>
-        <th>前日までの総合計</th>
-        <th>複利</th>
-        <th>今日の入金</th>
-        <th>本日の総合計</th>
-      </tr>
-    </thead>
-    <tbody id="tbody"></tbody>
-  </table>
-
-  <!-- 設定モーダル -->
-  <div class="modal-backdrop" id="modalBackdrop">
-    <div class="modal">
-      <h3 id="modalTitle">設定</h3>
-
-      <div class="modal-row">
-        <label for="boxNameInput">貯金箱の名前</label>
-        <input type="text" id="boxNameInput" autocomplete="off">
+    <!-- タイトル行（中央タイトル＋右端設定） -->
+    <div class="box-header">
+      <div class="box-title-row">
+        <h2 id="currentBoxTitle">貯金箱</h2>
+        <span id="levelDisplay" class="level-inline"></span>
+        <button id="settingsButton">設定</button>
       </div>
-
-      <div class="modal-row">
-        <label for="rateInput">複利率（％／日）</label>
-        <input type="number" id="rateInput" step="0.1" inputmode="decimal">
-      </div>
-
-      <div class="modal-row">
-        <button id="resetButton" class="danger">この貯金箱をリセット</button>
-      </div>
-
-      <div class="confirm-box" id="resetConfirmBox" style="display:none;">
-        <div id="resetConfirmText"></div>
-        <div class="confirm-buttons">
-          <button id="resetOkButton" class="danger">OK</button>
-          <button id="resetNoButton">NO</button>
+      <div class="xp-info">
+        
+        <div id="xpBarContainer">
+          <div id="xpBar"></div>
+          <div id="xpText"></div>
         </div>
       </div>
+    </div>
+    <!-- 最終日の総合計 -->
+    <div class="total-display" id="totalDisplay">最終総合計：0 円</div>
 
-      <div class="modal-buttons">
-        <button id="modalCloseButton">閉じる</button>
-        <button id="modalSaveButton">保存</button>
+    <!-- 入金額合計・複利合計 -->
+    <div class="summary-row">
+      <div class="summary-box" id="depositSum">入金額合計：0 円</div>
+      <div class="summary-box" id="interestSum">複利合計：0 円</div>
+    </div>
+
+    <!-- テーブル -->
+    <table id="mainTable">
+      <thead>
+        <tr>
+          <th>日付</th>
+          <th>前日までの総合計</th>
+          <th>複利</th>
+          <th>今日の入金</th>
+          <th>本日の総合計</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+
+    <!-- 設定モーダル -->
+    <div class="modal-backdrop" id="modalBackdrop">
+      <div class="modal">
+        <h3 id="modalTitle">設定</h3>
+
+        <div class="modal-row">
+          <label for="boxNameInput">貯金箱の名前</label>
+          <input type="text" id="boxNameInput" autocomplete="off">
+        </div>
+
+        <div class="modal-row">
+          <label for="rateInput">複利率（％／日）</label>
+          <input type="number" id="rateInput" step="0.1" inputmode="decimal">
+        </div>
+
+        <div class="modal-row">
+          <button id="resetButton" class="danger">この貯金箱をリセット</button>
+        </div>
+
+        <div class="confirm-box" id="resetConfirmBox" style="display:none;">
+          <div id="resetConfirmText"></div>
+          <div class="confirm-buttons">
+            <button id="resetOkButton" class="danger">OK</button>
+            <button id="resetNoButton">NO</button>
+          </div>
+        </div>
+
+        <div class="modal-buttons">
+          <button id="modalCloseButton">閉じる</button>
+          <button id="modalSaveButton">保存</button>
+        </div>
       </div>
     </div>
   </div>
-
   <script>
     /* データ管理 */
     let data = JSON.parse(localStorage.getItem('chokinData') || '{}');
     if (!data.boxes) data.boxes = {};
+
+    /* ★ レベル称号リスト（Lv1〜Lv20） */
+    const TITLES = [
+      "ビギナー貯金家",
+      "コツコツ貯金家",
+      "スマート貯金家",
+      "しっかり貯金家",
+      "貯金マスター",
+      "ゴールド貯金家",
+      "プラチナ貯金家",
+      "ダイヤ貯金家",
+      "エメラルド貯金家",
+      "レジェンド貯金家",
+      "スーパー貯金王",
+      "ウルトラ貯金王",
+      "メガ貯金王",
+      "ギガ貯金王",
+      "テラ貯金王",
+      "神級貯金家",
+      "天界の貯金家",
+      "宇宙貯金家",
+      "銀河貯金家",
+      "伝説の貯金神"
+    ];
+
+    /* ★ 既存データ補正（NaN防止 & 新仕様対応） */
+    function normalizeBoxes() {
+      const keys = Object.keys(data.boxes);
+      keys.forEach(key => {
+        const box = data.boxes[key];
+
+        if (box.level == null) box.level = 1;
+        if (box.xp == null) box.xp = 0;
+
+        if (!box.rows) {
+          box.rows = [];
+          for (let i = 1; i <= 31; i++) {
+            box.rows.push({ day: i, today: 0, level: 1 });
+          }
+        } else {
+          box.rows.forEach(r => {
+            if (r.level == null) r.level = 1;
+          });
+        }
+      });
+    }
+
+    normalizeBoxes();
 
     if (!data.currentBoxKey || !data.boxes[data.currentBoxKey]) {
       const key = 'box1';
@@ -256,8 +469,22 @@
 
     function createNewBox(name) {
       const rows = [];
-      for (let i = 1; i <= 31; i++) rows.push({ day: i, today: 0 });
-      return { name, rate: 1.0, rows };
+      for (let i = 1; i <= 31; i++) {
+        rows.push({ day: i, today: 0, level: 1 });
+      }
+      return {
+        name,
+        level: 1,
+        xp: 0,
+        rows
+      };
+    }
+
+    /* ★ レベルごとの複利率（1,3,5,7,10） */
+    function getRateByLevel(level) {
+      const rates = [2, 2, 2, 2, 2];
+      const safe = (!level || level < 1) ? 1 : (level > 5 ? 5 : level);
+      return rates[safe - 1];
     }
 
     function saveData() {
@@ -335,47 +562,66 @@
       tbody.innerHTML = '';
 
       const box = getCurrentBox();
-      const rate = box.rate || 0;
 
-      let prevTotal = 0;
-      let finalTotal = 0;
+      // ★ 表示前に必ず全日再計算
+      calculateAllDays(box);
+
       let depositSum = 0;
       let interestSum = 0;
 
       box.rows.forEach((row, idx) => {
-        const interest = Math.floor(prevTotal * (rate / 100));
-        const today = Number(row.today) || 0;
-        const total = prevTotal + interest + today;
-
-        depositSum += today;
-        interestSum += interest;
-
         const tr = document.createElement('tr');
 
         const tdDay = document.createElement('td');
         tdDay.textContent = row.day;
 
         const tdPrev = document.createElement('td');
-        tdPrev.textContent = prevTotal;
+        tdPrev.textContent = idx === 0 ? 0 : box.rows[idx - 1].total;
 
         const tdInterest = document.createElement('td');
-        tdInterest.textContent = interest;
+        tdInterest.textContent = row.interest;
+        interestSum += row.interest;
 
         const tdToday = document.createElement('td');
         const input = document.createElement('input');
         input.type = 'number';
         input.inputMode = 'decimal';
-        input.value = today || '';
-        input.onchange = (e) => {
-          box.rows[idx].today = Number(e.target.value) || 0;
+        input.value = row.today || '';
+
+        // ★ 入金変更 → 全日再計算 → 再描画
+        input.oninput = (e) => {
+          const cursorPos = e.target.selectionStart; // ★ カーソル位置保存
+          const value = Number(e.target.value) || 0;
+
+          box.rows[idx].today = value;
+
+          // ★ 全体再計算（複利・総合計・レベル・XP）
+          calculateAllDays(box);
           saveData();
+          updateLevelUI();
+
+          // ★ テーブル全体再描画（複利が正しくなる）
           renderTable();
+
+          // ★ 再描画後の input を取得し直す
+          const newInput = document.querySelector(
+            `#tbody tr:nth-child(${idx + 1}) input`
+          );
+
+          if (newInput) {
+            newInput.focus();
+            newInput.selectionStart = newInput.selectionEnd = cursorPos; // ★ カーソル復元
+          }
         };
+
         tdToday.appendChild(input);
 
         const tdTotal = document.createElement('td');
-        tdTotal.textContent = total;
+        tdTotal.textContent = row.total;
 
+        depositSum += Number(row.today) || 0;
+
+        tr.className = 'row-level-' + row.level;
         tr.appendChild(tdDay);
         tr.appendChild(tdPrev);
         tr.appendChild(tdInterest);
@@ -383,14 +629,10 @@
         tr.appendChild(tdTotal);
 
         tbody.appendChild(tr);
-
-        prevTotal = total;
-        finalTotal = total;
       });
 
-      /* 上部の表示を「最終日の結果」に変更 */
       document.getElementById('totalDisplay').textContent =
-        '最終総合計：' + finalTotal + ' 円';
+        '最終総合計：' + box.rows[box.rows.length - 1].total + ' 円';
 
       document.getElementById('depositSum').textContent =
         '入金額合計：' + depositSum + ' 円';
@@ -409,8 +651,55 @@
       renderTabs();
       updateTitle();
       renderTable();
+      updateLevelUI();
     }
 
+    function calculateAllDays(box) {
+      let level = 1;      // 今日の開始時点のレベル
+      let xp = 0;         // 累計XP
+      let prevTotal = 0;
+
+      for (let i = 0; i < box.rows.length; i++) {
+        const row = box.rows[i];
+        const today = Number(row.today) || 0;
+
+        // ★ 今日の行のレベルは「開始時点のレベル」
+        row.level = level;
+
+        // ★ 今日の利率も「開始時点のレベル」で決定
+        const rate = 2;
+        //const rate = getRateByLevel(level);
+
+        // ★ 複利計算
+        const interest = Math.floor(prevTotal * (rate / 100));
+        row.interest = interest;
+
+        // ★ 今日の総合計
+        const total = prevTotal + interest + today;
+        row.total = total;
+
+        // ★ XP加算（単純に今日の入金を足す）
+        xp += today;
+
+        // ★ 今日の処理が終わったあとにレベルアップ判定
+        /*while (xp >= 100 && level < 5) {
+          xp -= 100;
+          level++;
+        }*/
+
+        // ★ 100円ごとにレベルアップ（上限なし）
+        while (xp >= 100) {
+          level++;
+          xp -= 100;
+        }
+
+        prevTotal = total;
+      }
+
+      // ★ 最終レベルとXPを保存
+      box.level = level;
+      box.xp = xp;
+    }
     /* 設定モーダル */
     const modalBackdrop = document.getElementById('modalBackdrop');
     const modalTitle = document.getElementById('modalTitle');
@@ -429,7 +718,7 @@
       const box = getCurrentBox();
       modalTitle.textContent = box.name + ' の設定';
       boxNameInput.value = box.name;
-      rateInput.value = box.rate;
+      rateInput.value = getRateByLevel(box.level);
       resetConfirmBox.style.display = 'none';
       modalBackdrop.style.display = 'flex';
     };
@@ -441,7 +730,6 @@
     modalSaveButton.onclick = () => {
       const box = getCurrentBox();
       box.name = boxNameInput.value.trim() || box.name;
-      box.rate = parseFloat(rateInput.value) || 1.0;
       saveData();
       modalBackdrop.style.display = 'none';
       renderAll();
@@ -460,7 +748,12 @@
 
     resetOkButton.onclick = () => {
       const box = getCurrentBox();
-      box.rows.forEach(r => r.today = 0);
+      box.rows.forEach(r => {
+        r.today = 0;
+        r.level = 1;
+      });
+      box.xp = 0;
+      box.level = 1;
       saveData();
       resetConfirmBox.style.display = 'none';
       modalBackdrop.style.display = 'none';
@@ -474,6 +767,26 @@
       });
     }
 
+    function updateLevelUI() {
+      const box = getCurrentBox();
+
+      const level = box.level;
+      const title = TITLES[Math.min(level - 1, TITLES.length - 1)];
+
+      // ★ レベル＋称号表示
+      const levelEl = document.getElementById('levelDisplay');
+      levelEl.textContent = `Lv ${level}（${title}）`;
+
+      // レベル色クラス付け替え
+      levelEl.className = 'level-inline level-' + level;
+
+      // ★ XPゲージ
+      const xp = box.xp; // 0〜99
+      const percent = (xp / 100) * 100;
+      document.getElementById('xpBar').style.width = percent + '%';
+      document.getElementById('xpText').textContent = xp + '/100';
+
+    }
     renderAll();
   </script>
 </body>
