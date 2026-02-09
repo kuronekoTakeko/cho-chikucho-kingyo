@@ -147,6 +147,7 @@
       font-size: 20px;
       font-weight: bold;
       margin-top: 5px;
+      color: #000;
     }
 
     /* XPゲージ */
@@ -154,7 +155,8 @@
       width: 200px;
       height: 14px;
       background: #ddd;
-      border-radius: 6px;
+      border: 1px solid #000;
+      border-radius: 10px;
       overflow: hidden;
       margin: 4px auto 0;
       position: relative;
@@ -165,6 +167,7 @@
       background: #4caf50;
       width: 0%;
       transition: width 0.3s;
+      border-radius: 10px;
     }
 
     #xpText {
@@ -202,6 +205,39 @@
     .row-level-19 { background: #d8c0ff; }
     .row-level-20 { background: #ffe0ff; }
 
+
+    /* カード全体（名前・レベル・称号・XPゲージ） */
+    .header-card {
+      position: relative; /* ← これが重要！ */
+      background: #ffffffcc;
+      padding: 6px;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    .header-card.level-1 { background: #e6f3ff; }
+    .header-card.level-2 { background: #e6ffe6; }
+    .header-card.level-3 { background: #fff7b3; }
+    .header-card.level-4 { background: #ffd1a1; }
+    .header-card.level-5 { background: #ffcccc; }
+    .header-card.level-6 { background: #ffe0f0; }
+    .header-card.level-7 { background: #f0d0ff; }
+    .header-card.level-8 { background: #e0d8ff; }
+    .header-card.level-9 { background: #d0e0ff; }
+    .header-card.level-10 { background: #d0ffff; }
+    .header-card.level-11 { background: #fff0c0; }
+    .header-card.level-12 { background: #ffd0b0; }
+    .header-card.level-13 { background: #c0e0ff; }
+    .header-card.level-14 { background: #e0c0ff; }
+    .header-card.level-15 { background: #ffffff; }
+    .header-card.level-16 { background: #ffffe0; }
+    .header-card.level-17 { background: #e0ffff; }
+    .header-card.level-18 { background: #c0c8ff; }
+    .header-card.level-19 { background: #d8c0ff; }
+    .header-card.level-20 { background: #ffe0ff; }
+    
     /* タイトル行（中央タイトル＋右端設定） */
     .title-row {
       display: flex;
@@ -217,15 +253,26 @@
     }
     #settingsButton {
       position: absolute;
-      right: 0;
-      padding: 6px 12px;
-      font-size: 14px;
+      right: 10px;
+      top: 10px;
+
+      background: #f0f0f0;     /* ★ 薄いグレー背景でボタン感 */
+      border: 1px solid #ccc;  /* ★ 枠線 */
+      border-radius: 6px;      /* ★ 角丸で優しい印象 */
+      padding: 4px 10px;       /* ★ ボタンらしい余白 */
+      font-size: 0.9rem;
+      cursor: pointer;         /* ★ マウスカーソルが“押せる”形に */
+    }
+
+    #settingsButton:hover {
+      background: #e0e0e0;     /* ★ ホバー時に少し濃くして反応を見せる */
     }
 
     /* 合計表示（最終日の結果） */
     .total-display {
       font-size: 20px;
       font-weight: bold;
+      text-align: center;
       margin-bottom: 6px;
     }
 
@@ -322,6 +369,64 @@
     .confirm-buttons button {
       margin-left: 4px;
     }
+
+    thead th {
+      position: sticky;
+      top: 0;
+      background: #fff;
+      z-index: 5;
+    }
+
+    /* ★ スマホ用レイアウト（幅480px以下） */
+    @media (max-width: 480px) {
+
+      .box-title-row {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        align-items: center; /* ← 中央揃え */
+        gap: 6px;
+        width: 100%;
+        text-align: center;
+      }
+
+      #currentBoxTitle {
+        font-size: 1.3rem;
+        font-weight: bold;
+        text-align: center;
+        width: 100%;
+      }
+
+      #levelDisplay {
+        font-size: 1.1rem;
+        text-align: center;
+        width: 100%;
+      }
+
+      /* XPゲージを下に配置 */
+      .xp-info {
+        width: 100%;
+        margin-top: 6px;
+      }
+
+      /* 設定ボタン（文字版） */
+      #settingsButton {
+        position: absolute;
+        right: 5px;
+        top: 5px;
+
+        background: #f0f0f0;     /* ★ 薄いグレー背景でボタン感 */
+        border: 1px solid #ccc;  /* ★ 枠線 */
+        border-radius: 6px;      /* ★ 角丸で優しい印象 */
+        padding: 4px 10px;       /* ★ ボタンらしい余白 */
+        font-size: 0.9rem;
+        cursor: pointer;         /* ★ マウスカーソルが“押せる”形に */
+      }
+
+      #settingsButton:hover {
+        background: #e0e0e0;     /* ★ ホバー時に少し濃くして反応を見せる */
+      }
+    }
   </style>
 </head>
 
@@ -336,17 +441,18 @@
     <!-- ▲ ここまでが新しいタブ ▲ -->
 
     <!-- タイトル行（中央タイトル＋右端設定） -->
-    <div class="box-header">
-      <div class="box-title-row">
-        <h2 id="currentBoxTitle">貯金箱</h2>
-        <span id="levelDisplay" class="level-inline"></span>
-        <button id="settingsButton">設定</button>
-      </div>
-      <div class="xp-info">
-        
-        <div id="xpBarContainer">
-          <div id="xpBar"></div>
-          <div id="xpText"></div>
+    <div class = "header-card">
+      <div class="box-header">
+        <div class="box-title-row">
+          <h2 id="currentBoxTitle">貯金箱</h2>
+          <span id="levelDisplay" class="level-inline"></span>
+          <button id="settingsButton">設定</button>
+        </div>
+        <div class="xp-info">
+          <div id="xpBarContainer">
+            <div id="xpBar"></div>
+            <div id="xpText"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -584,8 +690,13 @@
 
         const tdToday = document.createElement('td');
         const input = document.createElement('input');
-        input.type = 'number';
-        input.inputMode = 'decimal';
+
+        input.type = "number";
+        input.inputMode = "numeric";   // ★ スマホで数字キーボード
+        input.pattern = "[0-9]*";      // ★ iPhone対策
+        input.min = "0";
+        input.classList.add("deposit-input");
+
         input.value = row.today || '';
 
         // ★ 入金変更 → 全日再計算 → 再描画
@@ -766,6 +877,18 @@
         navigator.serviceWorker.register('./service-worker.js');
       });
     }
+    
+    function updateHeaderCardColor(level) {
+      const headerCard = document.querySelector('.header-card');
+
+      // 既存のレベルクラスを削除
+      for (let i = 1; i <= 20; i++) {
+        headerCard.classList.remove(`level-${i}`);
+      }
+
+      // 現在のレベルクラスを追加
+      headerCard.classList.add(`level-${level}`);
+    }
 
     function updateLevelUI() {
       const box = getCurrentBox();
@@ -786,6 +909,8 @@
       document.getElementById('xpBar').style.width = percent + '%';
       document.getElementById('xpText').textContent = xp + '/100';
 
+      // ★ カード色をレベルに応じて変更（ここが今回の追加）
+      updateHeaderCardColor(level);
     }
     renderAll();
   </script>
